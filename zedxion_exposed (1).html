@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zedxion / USDT.z — Full Technical Breakdown</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
+
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #1a1a1a;
+    --border: #2a2a2a;
+    --text: #e8e8e0;
+    --muted: #666;
+    --accent: #ff4444;
+    --accent2: #ffaa00;
+    --accent3: #44aaff;
+    --green: #44dd88;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+    margin-bottom: 48px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    font-family: var(--mono);
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 48px;
+    border-left: 2px solid var(--border);
+    padding-left: 24px;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  h3 {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent2);
+    margin: 24px 0 10px;
+  }
+
+  p { margin-bottom: 14px; color: #ccc; }
+
+  /* Alert boxes */
+  .alert {
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .alert-red { border-color: #442020; background: #1a0a0a; color: #ff9999; }
+  .alert-yellow { border-color: #443320; background: #1a1200; color: #ffcc88; }
+  .alert-blue { border-color: #203040; background: #0a1520; color: #88ccff; }
+  .alert-green { border-color: #204030; background: #0a1a10; color: #88ffbb; }
+
+  .alert-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* Code blocks */
+  pre {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    overflow-x: auto;
+    margin: 16px 0;
+    line-height: 1.6;
+  }
+
+  .kw { color: #ff7766; }
+  .fn { color: #88aaff; }
+  .str { color: #88dd99; }
+  .num { color: #ffcc66; }
+  .cmt { color: #556; font-style: italic; }
+  .addr { color: #aaffcc; font-size: 11px; }
+
+  /* Contract table */
+  .contract-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12px;
+    margin: 16px 0;
+  }
+  .contract-table th {
+    text-align: left;
+    padding: 8px 12px;
+    background: var(--bg3);
+    color: var(--muted);
+    font-weight: 400;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .contract-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .contract-table tr:last-child td { border-bottom: none; }
+  .contract-table .addr-cell { color: #aaffcc; }
+  .contract-table .role-cell { color: var(--accent2); }
+  .contract-table .flag-red { color: var(--accent); }
+  .contract-table .flag-green { color: var(--green); }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 20px 0;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .flow-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 32px;
+  }
+  .flow-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .flow-dot.yellow { background: var(--accent2); }
+  .flow-dot.blue { background: var(--accent3); }
+  .flow-dot.green { background: var(--green); }
+  .flow-line {
+    width: 1px;
+    flex: 1;
+    background: var(--border);
+    margin: 4px 0;
+    min-height: 24px;
+  }
+  .flow-content {
+    padding-bottom: 24px;
+    flex: 1;
+  }
+  .flow-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .flow-desc {
+    font-size: 13px;
+    color: #aaa;
+  }
+
+  /* Comparison */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .compare-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px;
+  }
+  .compare-box.real { border-color: #204030; }
+  .compare-box.fake { border-color: #442020; }
+  .compare-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .compare-box.real .compare-label { color: var(--green); }
+  .compare-box.fake .compare-label { color: var(--accent); }
+  .compare-item {
+    font-size: 13px;
+    color: #bbb;
+    margin-bottom: 6px;
+  }
+  .compare-item span { color: var(--text); }
+
+  /* Stats row */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .stat-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-value {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 11px; color: var(--muted); }
+  .stat-box.danger .stat-value { color: var(--accent); }
+  .stat-box.warning .stat-value { color: var(--accent2); }
+  .stat-box.info .stat-value { color: var(--accent3); }
+
+  /* Checklist */
+  .checklist { list-style: none; margin: 12px 0; }
+  .checklist li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: #bbb;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-yes { color: var(--green); font-family: var(--mono); font-size: 12px; }
+  .check-no { color: var(--accent); font-family: var(--mono); font-size: 12px; }
+
+  /* TOC */
+  .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 48px;
+  }
+  .toc-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .toc a {
+    display: block;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent3);
+    text-decoration: none;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .toc a:last-child { border-bottom: none; }
+  .toc a:hover { color: var(--text); }
+  .toc-num { color: var(--muted); margin-right: 10px; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  @media (max-width: 600px) {
+    .compare { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    h1 { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+    <div class="tag">⚠ Fraud Analysis</div>
+    <div style="text-align:right;">
+      <div style="font-family:var(--mono); font-size:10px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:3px;">Researched &amp; Verified by</div>
+      <div style="font-family:var(--mono); font-size:20px; font-weight:600; color:var(--accent3); letter-spacing:0.2em;">TAM</div>
+    </div>
+  </div>
+  <h1>Zedxion / USDT.z<br>Full Technical Breakdown</h1>
+  <div class="subtitle">How a private blockchain, a $10 token contract, and wash trading bots<br>manufactured the appearance of a $13 billion stablecoin ecosystem.</div>
+</div>
+
+<div class="toc">
+  <div class="toc-title">Contents</div>
+  <a href="#overview"><span class="toc-num">01</span> What is USDT.z — and why it isn't real</a>
+  <a href="#contracts"><span class="toc-num">02</span> All known contracts — addresses and roles</a>
+  <a href="#token"><span class="toc-num">03</span> The token contract — TeamToken, not a bridge</a>
+  <a href="#bridge"><span class="toc-num">04</span> The fake bridge — how minting actually works</a>
+  <a href="#washtrading"><span class="toc-num">05</span> Wash trading — manufacturing fake volume</a>
+  <a href="#price"><span class="toc-num">06</span> The price illusion — ZedDex vs reality</a>
+  <a href="#chain"><span class="toc-num">07</span> The private chain — ZEDX price is self-declared</a>
+  <a href="#redflags"><span class="toc-num">08</span> Red flags checklist — verify for yourself</a>
+  <a href="#verdict"><span class="toc-num">09</span> Final verdict</a>
+</div>
+
+<!-- SECTION 1 -->
+<div class="section" id="overview">
+  <div class="section-label">01</div>
+  <h2>What is USDT.z — and why it isn't real</h2>
+
+  <p>USDT.z is marketed as "Tether USD Bridged ZED20" — a bridged version of real USDT that lives on the ZEDXION chain. The implication is that for every USDT.z token in existence, a real USDT is locked somewhere as collateral. <strong>This is false.</strong></p>
+
+  <p>Real bridged tokens work like this: you deposit 100 USDT on Ethereum → a bridge contract locks it → 100 wrapped tokens are minted on the destination chain. The lock and the mint are cryptographically linked. Examples: WBTC, axlUSDC, Stargate USDT.</p>
+
+  <p>USDT.z does not work this way. There is no locked USDT anywhere. The tokens were created from nothing using a template contract, with the entire supply minted to the deployer's own wallet.</p>
+
+  <div class="stats">
+    <div class="stat-box danger">
+      <div class="stat-value">27.5B</div>
+      <div class="stat-label">Total supply (self-minted)</div>
+    </div>
+    <div class="stat-box warning">
+      <div class="stat-value">50.7%</div>
+      <div class="stat-label">Held by one treasury wallet</div>
+    </div>
+    <div class="stat-box info">
+      <div class="stat-value">$2,445</div>
+      <div class="stat-label">Real DEX liquidity (PancakeSwap)</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="section" id="contracts">
+  <div class="section-label">02</div>
+  <h2>All known contracts — addresses and roles</h2>
+
+  <table class="contract-table">
+    <tr>
+      <th>Contract</th>
+      <th>Address</th>
+      <th>Chain</th>
+      <th>Role</th>
+    </tr>
+    <tr>
+      <td>USDT.z (BSC)</td>
+      <td class="addr-cell">0x4BE35Ec329343d7d9F548d42B0F8c17FFfe07db4</td>
+      <td>BSC BEP-20</td>
+      <td class="role-cell">Main token — TeamToken template</td>
+    </tr>
+    <tr>
+      <td>Treasury/"Bridge"</td>
+      <td class="addr-cell">0xa3f37d00c47f4b0fdd5ace310632489a21779a6b</td>
+      <td>BSC</td>
+      <td class="role-cell">Holds 13.93B tokens, acts as "bridge"</td>
+    </tr>
+    <tr>
+      <td>PancakeSwap pair</td>
+      <td class="addr-cell">0x1114e352349076d4159e7486a2430cd0d47b226b</td>
+      <td>BSC</td>
+      <td class="role-cell">USDT.z / USDT pool — wash traded</td>
+    </tr>
+    <tr>
+      <td>USDT.z (ZED20 chain)</td>
+      <td class="addr-cell">0x273f41d1fe1ec2ce41fdf6d7590744a135a63df9</td>
+      <td>ZEDXION</td>
+      <td class="role-cell">Token on their private chain</td>
+    </tr>
+    <tr>
+      <td>USDZ (BSC variant)</td>
+      <td class="addr-cell">0x734D66f635523D7ddb7d2373C128333DA313041b</td>
+      <td>BSC</td>
+      <td class="role-cell">Second token variant — same scheme</td>
+    </tr>
+    <tr>
+      <td>Old ZEDXION token</td>
+      <td class="addr-cell">0xfbc4f3f645c4003a2e4f4e9b51077d2daa9a9341</td>
+      <td>BSC / ETH / TRX</td>
+      <td class="role-cell">Deprecated — migrated (classic rug signal)</td>
+    </tr>
+  </table>
+
+  <div class="alert alert-yellow">
+    <span class="alert-label">Note</span>
+    The existence of a deprecated "old contract" that was migrated is a major red flag. Legitimate projects don't need to swap out their base token contract. This is typically done to reset holder records and escape negative history.
+  </div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section" id="token">
+  <div class="section-label">03</div>
+  <h2>The token contract — TeamToken, not a bridge</h2>
+
+  <p>The USDT.z BSC contract's source code is verified on BscScan. The contract name is <strong>TeamToken</strong> — a generic token template distributed by Team.Finance, a token creation service. Anyone can deploy one for a few dollars.</p>
+
+  <p>Here is the actual constructor that created all 27.5 billion tokens:</p>
+
+<pre><span class="cmt">// Contract name: TeamToken</span>
+<span class="cmt">// Deployed via Team.Finance token creation service</span>
+<span class="cmt">// Compiler: v0.6.12, Optimization: Yes</span>
+
+<span class="kw">contract</span> <span class="fn">TeamToken</span> <span class="kw">is</span> ERC20 {
+    <span class="kw">event</span> TeamFinanceTokenMint(<span class="kw">address</span> owner);
+
+    <span class="kw">constructor</span>(
+        <span class="kw">string memory</span> name,       <span class="cmt">// "Tether USD"</span>
+        <span class="kw">string memory</span> symbol,     <span class="cmt">// "USDT.z"</span>
+        <span class="kw">uint8</span> decimals,            <span class="cmt">// 18</span>
+        <span class="kw">uint256</span> supply,            <span class="cmt">// 27,500,000,000 * 1e18</span>
+        <span class="kw">address</span> owner,            <span class="cmt">// their treasury wallet</span>
+        <span class="kw">address</span> feeWallet          <span class="cmt">// Team.Finance fee recipient</span>
+    ) {
+        _setupDecimals(decimals);
+        _mint(owner, supply);       <span class="cmt">// ALL tokens minted to deployer</span>
+        <span class="kw">emit</span> TeamFinanceTokenMint(owner);
+    }
+}
+</pre>
+
+  <div class="alert alert-red">
+    <span class="alert-label">Critical finding</span>
+    There is no bridge logic. No locking mechanism. No validator. No proof of reserve. The entire 27.5 billion token supply was minted in a single transaction to their own wallet. This is identical to any meme coin deployment — the only difference is the name says "Tether USD."
+  </div>
+
+  <div class="compare">
+    <div class="compare-box real">
+      <div class="compare-label">Real bridged token (e.g. WBTC)</div>
+      <div class="compare-item">Deposit BTC → <span>custodian locks it</span></div>
+      <div class="compare-item">Proof of reserves: <span>publicly audited</span></div>
+      <div class="compare-item">Mint: <span>only when BTC is locked</span></div>
+      <div class="compare-item">Burn: <span>destroys token + releases BTC</span></div>
+      <div class="compare-item">Supply: <span>matches locked collateral</span></div>
+    </div>
+    <div class="compare-box fake">
+      <div class="compare-label">USDT.z (Zedxion)</div>
+      <div class="compare-item">No deposit required: <span>free mint</span></div>
+      <div class="compare-item">Proof of reserves: <span>none</span></div>
+      <div class="compare-item">Mint: <span>all at deployment, to owner</span></div>
+      <div class="compare-item">Burn: <span>no burn mechanism</span></div>
+      <div class="compare-item">Supply: <span>arbitrary, 27.5B</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="section" id="bridge">
+  <div class="section-label">04</div>
+  <h2>The fake bridge — how "bridging" actually works</h2>
+
+  <p>When you "bridge" USDT to USDT.z using their bridge at <code>bridge.zedxion.com</code>, here is what actually happens vs. what they claim:</p>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-left"><div class="flow-dot"></div><div class="flow-line"></div></div>
+      <div class="flow-content">
+        <div class="flow-title" style="color:var(--accent)">What they claim</div>
+        <div class="flow-desc">Your USDT is locked in a secure bridge contract. An equivalent USDT.z is minted on the ZED20 chain, backed 1:1 by your locked USDT.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-left"><div class="flow-dot yellow"></div><div class="flow-line"></div></div>
+      <div class="flow-content">
+        <div class="flow-title" style="color:var(--accent2)">What actually happens</div>
+        <div class="flow-desc">Your USDT is sent to the treasury wallet <code>0xa3f37d00...779a6b</code>. That wallet then sends you USDT.z from its 13.93B token reserve. There is no lock. There is no mint. Your real USDT goes into their pocket.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-left"><div class="flow-dot red"></div><div class="flow-line"></div></div>
+      <div class="flow-content">
+        <div class="flow-title" style="color:var(--accent)">When you try to bridge back</div>
+        <div class="flow-desc">You send USDT.z back to the treasury. They are supposed to send you USDT. Whether they do depends entirely on whether they choose to. There is no smart contract enforcing this. No code protects you. It is pure trust in an anonymous team.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-left"><div class="flow-dot green"></div></div>
+      <div class="flow-content">
+        <div class="flow-title" style="color:var(--green)">A real bridge for comparison (Stargate / Omnibridge)</div>
+        <div class="flow-desc">A smart contract automatically locks your deposit. A separate smart contract on the destination chain mints the wrapped token. Redemption is trustless — the lock and burn are atomic and enforced by code. No human can intercept your funds.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="section" id="washtrading">
+  <div class="section-label">05</div>
+  <h2>Wash trading — manufacturing fake volume</h2>
+
+  <p>The PancakeSwap pair for USDT.z / USDT has approximately <strong>$2,445 in total liquidity</strong> yet processes around <strong>880 transactions per day</strong>. This ratio is physically impossible for organic trading.</p>
+
+  <p>To understand why: if a pool has $2,445 in liquidity, a realistic daily volume would be $200–$500 (roughly 10–20% of liquidity). Instead, the reported volume is many multiples higher. The only explanation is that the same wallets are swapping funds back and forth repeatedly — called wash trading.</p>
+
+  <h3>How the wash trading works</h3>
+
+<pre><span class="cmt">// Conceptual pattern of what their bots are doing</span>
+<span class="cmt">// Wallets A, B, C are all controlled by Zedxion</span>
+
+<span class="kw">const</span> ROUTER = <span class="str">"0x10ed43c7...4e256024e"</span>  <span class="cmt">// PancakeSwap Router V2</span>
+<span class="kw">const</span> PAIR   = <span class="str">"0x1114e352...1226b"</span>      <span class="cmt">// USDT.z/USDT pool</span>
+<span class="kw">const</span> wallets = [walletA, walletB, walletC]   <span class="cmt">// rotating controlled wallets</span>
+
+<span class="kw">while</span> (<span class="kw">true</span>) {
+  <span class="kw">const</span> amount = random(<span class="num">0.001</span>, <span class="num">0.05</span>)          <span class="cmt">// tiny random amounts</span>
+  <span class="kw">const</span> wallet = wallets[nextIndex()]
+
+  <span class="cmt">// alternates buy and sell to create fake bidirectional volume</span>
+  <span class="kw">await</span> router.swapExactTokensForTokens(
+    amount, <span class="num">0</span>,
+    [USDT, USDT_Z],                            <span class="cmt">// or [USDT_Z, USDT] on next cycle</span>
+    wallet.address,
+    deadline
+  )
+
+  <span class="kw">await</span> sleep(random(<span class="num">30</span>, <span class="num">180</span>))               <span class="cmt">// random delay to look organic</span>
+}
+</pre>
+
+  <p>The goal is not profit from trading — the gas fees eat any gain on tiny swaps. The goal is to generate transaction count and volume numbers that make analytics platforms like GeckoTerminal, Dexscreener, and CoinGecko report high activity, creating social proof for potential investors.</p>
+
+  <div class="alert alert-yellow">
+    <span class="alert-label">How to verify this yourself</span>
+    Go to BscScan, look up the PancakeSwap pair <code>0x1114e352349076d4159e7486a2430cd0d47b226b</code>, click "Transactions" and examine the wallet addresses making swaps. You will see the same small group of wallets repeatedly swapping tiny amounts back and forth.
+  </div>
+</div>
+
+<!-- SECTION 6 -->
+<div class="section" id="price">
+  <div class="section-label">06</div>
+  <h2>The price illusion — ZedDex vs reality</h2>
+
+  <p>There are two completely different prices for USDT.z depending on where you look:</p>
+
+  <div class="compare">
+    <div class="compare-box fake">
+      <div class="compare-label">ZedDex (their own DEX)</div>
+      <div class="compare-item">USDT.z price: <span>$1.00</span></div>
+      <div class="compare-item">Volume: <span>"billions" (self-reported)</span></div>
+      <div class="compare-item">Liquidity: <span>undisclosed</span></div>
+      <div class="compare-item">Audited: <span>no</span></div>
+      <div class="compare-item">Who controls it: <span>Zedxion team</span></div>
+    </div>
+    <div class="compare-box real">
+      <div class="compare-label">PancakeSwap (real public market)</div>
+      <div class="compare-item">USDT.z price: <span>$0.008</span></div>
+      <div class="compare-item">Volume: <span>~$3,000/day (bot-generated)</span></div>
+      <div class="compare-item">Liquidity: <span>$2,445 real</span></div>
+      <div class="compare-item">Audited: <span>on-chain, verifiable</span></div>
+      <div class="compare-item">Who controls it: <span>public contract</span></div>
+    </div>
+  </div>
+
+  <p>CoinGecko and CoinMarketCap show $1.00 because they pull price from ZedDex — the only registered market. This is a deliberate design choice. By only registering their own controlled exchange as the price source, they ensure that anyone doing a quick check sees a "stablecoin" trading at $1 with enormous volume.</p>
+
+  <p>The actual price you would receive if you tried to sell USDT.z for real USDT on PancakeSwap is <strong>$0.008</strong> — less than 1 cent per token. An investor who bought $1,000 of USDT.z at the "advertised" $1 price would receive $8 worth of USDT when they tried to exit through the real market.</p>
+</div>
+
+<!-- SECTION 7 -->
+<div class="section" id="chain">
+  <div class="section-label">07</div>
+  <h2>The private chain — ZEDX price is self-declared</h2>
+
+  <p>The Zedxion explorer (ZedScan) shows ZEDX coin trading at <strong>$1,807.68</strong> — a price higher than Ethereum. This figure appears nowhere on any independent exchange. No major CEX lists ZEDX. No reputable price aggregator independently verifies it.</p>
+
+  <p>Because ZEDXION is a private, permissioned blockchain controlled by the Zedxion team, they can display any price they want on their own explorer. There is no external validation. The $1,807 figure exists solely on zedscan.net — a website they run.</p>
+
+  <div class="alert alert-red">
+    <span class="alert-label">The circular value illusion</span>
+    Zedxion claims: USDT.z is backed by the ZED20 network. The ZED20 network has billions in assets. Those assets include USDT.z reserves. This is circular — USDT.z is backed by a system whose value is itself composed of USDT.z. Neither asset has independent external backing.
+  </div>
+
+  <h3>The DPoS validator claim</h3>
+  <p>They claim a "Delegated Proof of Stake" consensus with validators. On a public blockchain like BSC or Ethereum you can verify validator sets on-chain. On their private chain, the validator list is whatever they say it is. There is no way to independently verify that these validators exist, are independent, or are not all controlled by the same team.</p>
+</div>
+
+<!-- SECTION 8 -->
+<div class="section" id="redflags">
+  <div class="section-label">08</div>
+  <h2>Red flags checklist — verify for yourself</h2>
+  <p>Every item below can be independently verified using BscScan, GeckoTerminal, and the contract addresses listed in Section 02.</p>
+
+  <ul class="checklist">
+    <li><span class="check-no">✗</span> Token contract is "TeamToken" — a $10 template, not a real bridge</li>
+    <li><span class="check-no">✗</span> Entire supply minted to deployer in one transaction — no gradual bridge issuance</li>
+    <li><span class="check-no">✗</span> 50.7% of supply in one treasury wallet — extreme centralization</li>
+    <li><span class="check-no">✗</span> $2,445 real liquidity vs 880 tx/day — mathematically impossible organically</li>
+    <li><span class="check-no">✗</span> Price on ZedDex ($1.00) vs PancakeSwap ($0.008) — 125x discrepancy</li>
+    <li><span class="check-no">✗</span> ZEDX priced at $1,807 on their own explorer — unverifiable on any external market</li>
+    <li><span class="check-no">✗</span> Old contract deprecated and migrated — classic reset of negative history</li>
+    <li><span class="check-no">✗</span> "No single founder" / anonymous team — no legal accountability</li>
+    <li><span class="check-no">✗</span> No independent security audit submitted for any contract</li>
+    <li><span class="check-no">✗</span> Bridge is a wallet transfer, not a smart contract — manual, fully custodial</li>
+    <li><span class="check-no">✗</span> All volume, reserves and price sourced exclusively from their own infrastructure</li>
+    <li><span class="check-yes">✓</span> Listed on CoinMarketCap — but CMC listing requires no audit or proof of backing</li>
+    <li><span class="check-yes">✓</span> Smart contract is verified on BscScan — transparency confirms it is a TeamToken</li>
+  </ul>
+</div>
+
+<!-- SECTION 9 -->
+<div class="section" id="verdict">
+  <div class="section-label">09</div>
+  <h2>Final verdict</h2>
+
+  <p>Zedxion / USDT.z is a manufactured legitimacy scheme. It is not technically a honeypot (you can sell the token) and it is not technically a rugpull in the classic sense. It is something more sophisticated: a <strong>fake ecosystem</strong> designed to make people believe they are holding a real stablecoin within a real blockchain economy.</p>
+
+  <p>The mechanics are:</p>
+  <ol style="margin: 12px 0 12px 20px; color: #bbb; font-size: 14px; line-height: 2;">
+    <li>Print 27.5B tokens for free using a template contract</li>
+    <li>Call them "bridged USDT" to borrow Tether's legitimacy</li>
+    <li>Create a private blockchain where you control all prices and activity</li>
+    <li>Run bots on real DEXes to fake trading volume and holder counts</li>
+    <li>Submit your own price feeds to CMC / CoinGecko as the only source</li>
+    <li>Build a neobanking app (ZedPay) where users deposit real money for fake tokens</li>
+    <li>Collect real USDT from "bridge" users with no contractual obligation to return it</li>
+  </ol>
+
+  <div class="alert alert-blue">
+    <span class="alert-label">If you are currently holding USDT.z</span>
+    Do not deposit more. The only exit is selling on PancakeSwap (expect ~$0.008 per token) or attempting to "bridge back" through their platform (which requires trusting them to manually send you real USDT). Neither is guaranteed. There is no smart contract protecting your funds.
+  </div>
+
+  <div class="alert alert-red">
+    <span class="alert-label">If someone is asking you to invest</span>
+    Ask them to show you the locked collateral on BscScan. Ask them why PancakeSwap shows $0.008 while ZedDex shows $1.00. Ask them to name one independent auditor who has verified their reserves. These questions will not have satisfactory answers.
+  </div>
+
+  <hr>
+  <p style="font-size: 12px; color: var(--muted); font-family: var(--mono);">
+    All contract addresses and on-chain data are publicly verifiable via bscscan.com, zedscan.net, and geckoterminal.com.<br>
+    This document is for educational and consumer protection purposes. No financial advice is implied.
+  </p>
+</div>
+
+</body>
+</html>
